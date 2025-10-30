@@ -35,6 +35,7 @@ cd ~
 git clone https://github.com/ggerganov/whisper.cpp
 cd whisper.cpp
 make -j$(nproc)
+
 # Télécharger modèle
 bash ./models/download-ggml-model.sh medium
 cd ~/multi-agent-system/jetson

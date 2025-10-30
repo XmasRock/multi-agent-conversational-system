@@ -1,7 +1,5 @@
 # jetson/config.yml
-# Configuration Agent Jetson
 
-# Réseau
 network:
   raspberry_pi_ip: "192.168.1.100"
   jetson_ip: "192.168.1.101"
@@ -19,19 +17,17 @@ network:
     host: "192.168.1.100"
     port: 5678
 
-# Agent
 agent:
   id: "jetson-conversational-01"
   type: "conversational"
   name: "Agent Conversationnel Principal"
-  
-# Modules
+
 modules:
   vision:
     enabled: true
     camera:
-      type: "csi"  # ← Important
-      device: 0    # CAM0 ou CAM1 sur Jetson
+      type: "csi"  # ou "usb"
+      device: 0
       width: 1920
       height: 1080
       fps: 30
@@ -46,33 +42,59 @@ modules:
   
   audio:
     enabled: true
+    stt:
+      engine: "whisper"  # whisper ou vosk
+      model: "models/whisper-medium.bin"
+      language: "fr"
+    tts:
+      engine: "piper"  # piper ou espeak
+      model: "fr_FR-siwis-medium"
+      rate: 1.0
     microphone:
-      device: "default"  # ou nom spécifique USB
+      device: "default"
       sample_rate: 16000
       channels: 1
     speaker:
-      device: "pulse"  # Utiliser PulseAudio (gère Bluetooth)
-      # Ou spécifique:
-      # device: "bluez_sink.AA_BB_CC_DD_EE_FF"
+      device: "pulse"  # Pour Bluetooth
   
   llm:
     enabled: true
-    model: "models/llama-3.1-8b-q4.gguf"
-    context_size: 8192
-    gpu_layers: 35
-    temperature: 0.7
-    top_p: 0.9
-    api_port: 8001
+    engine: "ollama"  # ← NOUVEAU : ollama au lieu de llama.cpp
+    
+    ollama:
+      host: "localhost"
+      port: 11434
+      model: "llama3.1:8b"  # Modèle par défaut
+      
+      # Modèles disponibles (à télécharger)
+      available_models:
+        - "llama3.1:8b"      # Recommandé - Équilibré
+        - "mistral:7b"       # Rapide et efficace
+        - "phi3:medium"      # Ultra-léger (3.8B)
+        - "gemma2:9b"        # Google, très bon
+        - "qwen2.5:7b"       # Multilingue excellent
+      
+      # Paramètres génération
+      temperature: 0.7
+      top_p: 0.9
+      top_k: 40
+      num_ctx: 8192        # Taille contexte
+      num_gpu: 1           # Utiliser GPU
+      num_thread: 4
+      repeat_penalty: 1.1
+    
+    # API server pour n8n
+    api_server:
+      enabled: true
+      port: 8001
+      format: "openai"  # Compatible OpenAI API
 
-# Logging
 logging:
   level: "INFO"
   file: "logs/agent.log"
   max_size_mb: 100
   backup_count: 5
 
-# Performance
 performance:
   vision_fps_target: 15
   audio_chunk_duration_ms: 1000
-  llm_max_tokens: 512

@@ -52,16 +52,21 @@ class ConversationalAgent:
             self.audio = None
         
         if self.config['modules']['llm']['enabled']:
+            # LLM avec Ollama
             self.llm = LLMAgent(self.config['modules']['llm'])
-            # LLM Server pour n8n
-            self.llm_server = LLMServer(
-                llm_agent=self.llm,
-                port=self.config['modules']['llm']['api_port']
-            )
+            
+            # API Server pour n8n
+            if self.config['modules']['llm'].get('api_server', {}).get('enabled', True):
+                ollama_config = self.config['modules']['llm']['ollama']
+                self.llm_server = LLMServer(
+                    ollama_host=ollama_config.get('host', 'localhost'),
+                    ollama_port=ollama_config.get('port', 11434),
+                    port=self.config['modules']['llm']['api_server'].get('port', 8001)
+                )
         else:
             self.llm = None
             self.llm_server = None
-        
+
         self.actions = ActionAgent(self.config, self.mqtt_client)
         
         # API Server
