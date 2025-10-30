@@ -1,5 +1,5 @@
 # multi-agent-conversational-system
-Distributed multi-agent system with vision, audio, and LLM orchestration
+Distributed multi-agent system with vision, audio, and LLM orchestration 
 
 # 🤖 Système Multi-Agents Conversationnel
 
