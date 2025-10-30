@@ -1,0 +1,32 @@
+# /etc/systemd/system/jetson-agent.service
+
+[Unit]
+Description=Jetson Conversational Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=jetson
+WorkingDirectory=/home/jetson/multi-agent-system/jetson
+Environment="PATH=/home/jetson/multi-agent-system/jetson/venv/bin"
+ExecStart=/home/jetson/multi-agent-system/jetson/venv/bin/python main.py
+
+# Restart automatique
+Restart=always
+RestartSec=10
+
+# Restart même si exit propre (code 0)
+# Décommenter si vous voulez restart même en cas d'arrêt normal
+# RestartForceExitStatus=0
+
+# Limites restart
+StartLimitInterval=200
+StartLimitBurst=5
+
+# Logs
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

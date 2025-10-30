@@ -1,0 +1,90 @@
+{
+    "name": "Jetson Control Agent",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "workflow-trigger",
+        "name": "Execute Workflow Trigger",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1,
+        "position": [240, 300]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://{{ $env.JETSON_IP }}:8000/action",
+          "authentication": "none",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ { \"action\": $json.action, \"params\": $json.params } }}",
+          "options": {}
+        },
+        "id": "call-jetson-api",
+        "name": "Call Jetson API",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [460, 300]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $('Execute Workflow Trigger').item.json.action }}",
+                "operation": "equals",
+                "value2": "speak"
+              }
+            ]
+          }
+        },
+        "id": "if-speak-action",
+        "name": "If Speak Action",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "position": [680, 300]
+      },
+      {
+        "parameters": {
+          "topic": "jetson/audio/speak",
+          "message": "={{ $('Execute Workflow Trigger').item.json.params.text }}",
+          "options": {
+            "qos": 1
+          }
+        },
+        "id": "mqtt-publish",
+        "name": "MQTT Publish (Alternative)",
+        "type": "n8n-nodes-base.mqtt",
+        "typeVersion": 1,
+        "position": [900, 200],
+        "credentials": {
+          "mqtt": {
+            "id": "mqtt-broker"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Retourner résultat\nconst result = $('Call Jetson API').item.json;\n\nreturn {\n  json: {\n    status: result.status || 'completed',\n    action: $('Execute Workflow Trigger').item.json.action,\n    timestamp: new Date().toISOString()\n  }\n};"
+        },
+        "id": "format-result",
+        "name": "Format Result",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [900, 300]
+      }
+    ],
+    "connections": {
+      "workflow-trigger": {
+        "main": [[{"node": "call-jetson-api", "type": "main", "index": 0}]]
+      },
+      "call-jetson-api": {
+        "main": [[{"node": "if-speak-action", "type": "main", "index": 0}]]
+      },
+      "if-speak-action": {
+        "main": [
+          [{"node": "mqtt-publish", "type": "main", "index": 0}],
+          [{"node": "format-result", "type": "main", "index": 0}]
+        ]
+      }
+    }
+  }

@@ -1,0 +1,60 @@
+{
+    "name": "Web Search Agent",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "workflow-trigger",
+        "name": "Execute Workflow Trigger",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1,
+        "position": [240, 300]
+      },
+      {
+        "parameters": {
+          "url": "=http://{{ $env.RASPBERRY_PI_IP }}:8080/searxng/search",
+          "authentication": "genericCredentialType",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "q",
+                "value": "={{ $json.query }}"
+              },
+              {
+                "name": "format",
+                "value": "json"
+              },
+              {
+                "name": "categories",
+                "value": "general"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "searxng-request",
+        "name": "SearXNG Search",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [460, 300]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Parser et formater résultats\nconst results = $input.first().json.results || [];\n\nconst formatted = results.slice(0, 5).map(r => ({\n  title: r.title,\n  url: r.url,\n  snippet: r.content || r.snippet || ''\n}));\n\nreturn {\n  json: {\n    search_results: formatted,\n    query: $('Execute Workflow Trigger').item.json.query,\n    count: formatted.length\n  }\n};"
+        },
+        "id": "format-results",
+        "name": "Format Results",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [680, 300]
+      }
+    ],
+    "connections": {
+      "workflow-trigger": {
+        "main": [[{"node": "searxng-request", "type": "main", "index": 0}]]
+      },
+      "searxng-request": {
+        "main": [[{"node": "format-results", "type": "main", "index": 0}]]
+      }
+    }
+  }

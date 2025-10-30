@@ -1,0 +1,70 @@
+{
+    "name": "MCP Context Tool",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "workflow-trigger",
+        "name": "Execute Workflow Trigger",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1,
+        "position": [240, 300]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://{{ $env.RASPBERRY_PI_IP }}:8080/query",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {\n  \"requesting_agent\": \"n8n-ai-agent\",\n  \"query_type\": $json.query_type || \"get_current_context\",\n  \"parameters\": $json.parameters || {}\n} }}",
+          "options": {}
+        },
+        "id": "query-mcp",
+        "name": "Query MCP Server",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [460, 300]
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "collectionName": "conversation_memory",
+          "queryText": "={{ $('Execute Workflow Trigger').item.json.search_query || '' }}",
+          "limit": 5
+        },
+        "id": "chromadb-search",
+        "name": "Search ChromaDB Memory",
+        "type": "n8n-nodes-chromadb.chromadb",
+        "typeVersion": 1,
+        "position": [460, 480],
+        "credentials": {
+          "chromadbApi": {
+            "id": "chromadb-creds"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merger contexte MCP + mémoire ChromaDB\nconst mcpContext = $('Query MCP Server').first().json;\nconst memoryResults = $('Search ChromaDB Memory').all();\n\nreturn {\n  json: {\n    mcp_context: mcpContext.data || {},\n    relevant_memories: memoryResults.map(r => ({\n      text: r.json.document,\n      metadata: r.json.metadata,\n      distance: r.json.distance\n    })),\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "merge-context",
+      "name": "Merge Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 380]
+    }
+  ],
+  "connections": {
+    "workflow-trigger": {
+      "main": [[
+        {"node": "query-mcp", "type": "main", "index": 0},
+        {"node": "chromadb-search", "type": "main", "index": 0}
+      ]]
+    },
+    "query-mcp": {
+      "main": [[{"node": "merge-context", "type": "main", "index": 0}]]
+    },
+    "chromadb-search": {
+      "main": [[{"node": "merge-context", "type": "main", "index": 0}]]
+    }
+  }
+}

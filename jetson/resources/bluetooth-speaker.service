@@ -1,0 +1,11 @@
+[Unit]
+Description=Reconnect Bluetooth Speaker
+After=bluetooth.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bluetoothctl connect AA:BB:CC:DD:EE:FF
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,78 @@
+# jetson/config.yml
+# Configuration Agent Jetson
+
+# Réseau
+network:
+  raspberry_pi_ip: "192.168.1.100"
+  jetson_ip: "192.168.1.101"
+  
+  mcp_server:
+    host: "192.168.1.100"
+    port: 8080
+    ws_port: 8081
+  
+  mqtt_broker:
+    host: "192.168.1.100"
+    port: 1883
+  
+  n8n_server:
+    host: "192.168.1.100"
+    port: 5678
+
+# Agent
+agent:
+  id: "jetson-conversational-01"
+  type: "conversational"
+  name: "Agent Conversationnel Principal"
+  
+# Modules
+modules:
+  vision:
+    enabled: true
+    camera:
+      type: "csi"  # ← Important
+      device: 0    # CAM0 ou CAM1 sur Jetson
+      width: 1920
+      height: 1080
+      fps: 30
+    yolo:
+      model: "models/yolo11n.engine"
+      conf_threshold: 0.5
+      iou_threshold: 0.45
+    face_recognition:
+      model: "buffalo_l"
+      threshold: 0.6
+      embeddings_file: "models/face_embeddings.pkl"
+  
+  audio:
+    enabled: true
+    microphone:
+      device: "default"  # ou nom spécifique USB
+      sample_rate: 16000
+      channels: 1
+    speaker:
+      device: "pulse"  # Utiliser PulseAudio (gère Bluetooth)
+      # Ou spécifique:
+      # device: "bluez_sink.AA_BB_CC_DD_EE_FF"
+  
+  llm:
+    enabled: true
+    model: "models/llama-3.1-8b-q4.gguf"
+    context_size: 8192
+    gpu_layers: 35
+    temperature: 0.7
+    top_p: 0.9
+    api_port: 8001
+
+# Logging
+logging:
+  level: "INFO"
+  file: "logs/agent.log"
+  max_size_mb: 100
+  backup_count: 5
+
+# Performance
+performance:
+  vision_fps_target: 15
+  audio_chunk_duration_ms: 1000
+  llm_max_tokens: 512

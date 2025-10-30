@@ -1,0 +1,30 @@
+# jetson/requirements.txt
+
+# Core
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+websockets==12.0
+pydantic==2.5.3
+pyyaml==6.0.1
+python-multipart==0.0.6
+httpx==0.26.0
+
+# MQTT
+paho-mqtt==1.6.1
+
+# Vision
+opencv-python==4.9.0.80
+ultralytics==8.1.0
+insightface==0.7.3
+onnxruntime-gpu==1.16.3
+
+# Audio
+pyaudio==0.2.14
+numpy==1.24.3
+wave
+
+# LLM
+llama-cpp-python==0.2.27  # Avec support CUDA
+
+# Utils
+python-dotenv==1.0.0

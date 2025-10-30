@@ -1,0 +1,68 @@
+{
+    "name": "Email Agent",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "workflow-trigger",
+        "name": "Execute Workflow Trigger",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1,
+        "position": [240, 300]
+      },
+      {
+        "parameters": {
+          "operation": "send",
+          "fromEmail": "={{ $env.EMAIL_FROM }}",
+          "toEmail": "={{ $json.to }}",
+          "subject": "={{ $json.subject }}",
+          "emailType": "text",
+          "message": "={{ $json.body }}"
+        },
+        "id": "send-email",
+        "name": "Send Email",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2,
+        "position": [460, 300],
+        "credentials": {
+          "smtp": {
+            "id": "smtp-credentials"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=http://{{ $env.RASPBERRY_PI_IP }}:8080/context/update",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ {\n  \"agent_id\": \"n8n-email-agent\",\n  \"context_type\": \"email_sent\",\n  \"data\": {\n    \"to\": $('Execute Workflow Trigger').item.json.to,\n    \"subject\": $('Execute Workflow Trigger').item.json.subject,\n    \"timestamp\": $now\n  },\n  \"priority\": 3\n} }}"
+        },
+        "id": "log-to-mcp",
+        "name": "Log to MCP",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.1,
+        "position": [680, 300]
+      },
+      {
+        "parameters": {
+          "jsCode": "return {\n  json: {\n    status: 'sent',\n    to: $('Execute Workflow Trigger').item.json.to,\n    subject: $('Execute Workflow Trigger').item.json.subject,\n    timestamp: new Date().toISOString()\n  }\n};"
+        },
+        "id": "format-response",
+        "name": "Format Response",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [900, 300]
+      }
+    ],
+    "connections": {
+      "workflow-trigger": {
+        "main": [[{"node": "send-email", "type": "main", "index": 0}]]
+      },
+      "send-email": {
+        "main": [[{"node": "log-to-mcp", "type": "main", "index": 0}]]
+      },
+      "log-to-mcp": {
+        "main": [[{"node": "format-response", "type": "main", "index": 0}]]
+      }
+    }
+  }

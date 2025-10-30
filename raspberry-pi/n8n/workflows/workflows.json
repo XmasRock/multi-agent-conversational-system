@@ -1,0 +1,219 @@
+{
+    "name": "Master AI Agent",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "agent-input",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "webhook-trigger",
+        "name": "Webhook Trigger",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [240, 300]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Préparer input pour AI Agent\nconst input = $input.first().json;\n\nreturn {\n  json: {\n    text: input.text || '',\n    user_identity: input.user_identity || 'Unknown',\n    source: input.source || 'unknown',\n    context: {\n      location: input.location || 'Bureau',\n      time: new Date().toISOString()\n    }\n  }\n};"
+        },
+        "id": "prepare-input",
+        "name": "Prepare Input",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [460, 300]
+      },
+      {
+        "parameters": {
+          "agent": "conversationalAgent",
+          "promptType": "define",
+          "text": "=Tu es Claude, un assistant personnel intelligent.\n\nContexte:\n- Utilisateur: {{ $json.user_identity }}\n- Localisation: {{ $json.context.location }}\n- Heure: {{ $json.context.time }}\n\nOutils disponibles:\n- search_web: Rechercher sur internet\n- send_email: Envoyer des emails\n- control_jetson: Contrôler l'agent Jetson\n- get_context: Récupérer contexte depuis MCP\n- calendar: Gérer calendrier\n\nUtilise les outils appropriés pour répondre efficacement.\n\nUtilisateur: {{ $json.text }}",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "Tu es un coordinateur intelligent. Utilise les bons outils.",
+            "maxIterations": 10
+          }
+        },
+        "id": "ai-agent",
+        "name": "AI Agent",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.6,
+        "position": [680, 300]
+      },
+      {
+        "parameters": {
+          "model": "llama-3.1-8b",
+          "options": {
+            "baseURL": "=http://{{ $env.JETSON_IP }}:8001/v1",
+            "temperature": 0.7,
+            "maxTokens": 512
+          }
+        },
+        "id": "openai-model",
+        "name": "OpenAI Chat Model (Jetson)",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1,
+        "position": [680, 480],
+        "credentials": {
+          "openAiApi": {
+            "id": "jetson-llm",
+            "name": "Jetson LLM API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "name": "search_web",
+          "description": "Rechercher des informations sur internet. Utilise quand l'utilisateur demande des infos récentes.",
+          "workflowId": "={{ $('Get Workflow IDs').item.json.web_search_id }}",
+          "fields": {
+            "values": [
+              {
+                "name": "query",
+                "type": "string",
+                "description": "Terme de recherche"
+              }
+            ]
+          }
+        },
+        "id": "tool-search",
+        "name": "Web Search Tool",
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 1.1,
+        "position": [900, 140]
+      },
+      {
+        "parameters": {
+          "name": "send_email",
+          "description": "Envoyer un email. Paramètres: to, subject, body",
+          "workflowId": "={{ $('Get Workflow IDs').item.json.email_id }}",
+          "fields": {
+            "values": [
+              {
+                "name": "to",
+                "type": "string"
+              },
+              {
+                "name": "subject",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "id": "tool-email",
+        "name": "Email Tool",
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 1.1,
+        "position": [900, 260]
+      },
+      {
+        "parameters": {
+          "name": "control_jetson",
+          "description": "Contrôler l'agent Jetson (parler, analyser vision). Paramètres: action, params",
+          "workflowId": "={{ $('Get Workflow IDs').item.json.jetson_control_id }}",
+          "fields": {
+            "values": [
+              {
+                "name": "action",
+                "type": "string"
+              },
+              {
+                "name": "params",
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "id": "tool-jetson",
+        "name": "Jetson Control Tool",
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 1.1,
+        "position": [900, 380]
+      },
+      {
+        "parameters": {
+          "name": "get_context",
+          "description": "Récupérer contexte actuel depuis MCP (conversations précédentes, état agents)",
+          "workflowId": "={{ $('Get Workflow IDs').item.json.mcp_context_id }}",
+          "fields": {
+            "values": [
+              {
+                "name": "query_type",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "id": "tool-mcp",
+        "name": "MCP Context Tool",
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 1.1,
+        "position": [900, 500]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Formater réponse finale\nconst aiResponse = $input.first().json;\n\nreturn {\n  json: {\n    success: true,\n    response: aiResponse.output || aiResponse.text,\n    timestamp: new Date().toISOString()\n  }\n};"
+        },
+        "id": "format-response",
+        "name": "Format Response",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [900, 300]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}"
+        },
+        "id": "webhook-response",
+        "name": "Respond to Webhook",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1,
+        "position": [1120, 300]
+      },
+      {
+        "parameters": {
+          "operation": "insert",
+          "collectionName": "conversation_memory",
+          "documents": "={{ [$('Prepare Input').item.json.text, $('Format Response').item.json.response] }}",
+          "metadatas": "={{ [{user: $('Prepare Input').item.json.user_identity, type: 'user_query', timestamp: $now}, {user: $('Prepare Input').item.json.user_identity, type: 'assistant_response', timestamp: $now}] }}",
+          "ids": "={{ [$workflow.id + '_' + $now.toString() + '_user', $workflow.id + '_' + $now.toString() + '_assistant'] }}"
+        },
+        "id": "save-to-memory",
+        "name": "Save to ChromaDB Memory",
+        "type": "n8n-nodes-chromadb.chromadb",
+        "typeVersion": 1,
+        "position": [1120, 480],
+        "credentials": {
+          "chromadbApi": {
+            "id": "chromadb-creds"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "webhook-trigger": {
+        "main": [[{"node": "prepare-input", "type": "main", "index": 0}]]
+      },
+      "prepare-input": {
+        "main": [[{"node": "ai-agent", "type": "main", "index": 0}]]
+      },
+      "ai-agent": {
+        "main": [[{"node": "format-response", "type": "main", "index": 0}]]
+      },
+      "format-response": {
+        "main": [[
+          {"node": "webhook-response", "type": "main", "index": 0},
+          {"node": "save-to-memory", "type": "main", "index": 0}
+        ]]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    }
+  }

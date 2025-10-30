@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Logs
+*.log
+logs/
+*.out
+
+# Environnement
+.env
+*.env
+!.env.example
+
+# Modèles (trop gros pour git)
+*.gguf
+*.bin
+*.onnx
+*.engine
+*.pt
+*.pth
+*.pkl
+models/
+!models/.gitkeep
+
+# Base de données
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker volumes
+*_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# Jetson spécifique
+jetson/logs/
+jetson/models/
+
+# Raspberry Pi
+raspberry-pi/n8n/workflows/*.json.bak
