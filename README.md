@@ -1,56 +1,56 @@
-# 🤖 Système Multi-Agents Conversationnel
+# 🤖 Multi-Agent Conversational System
 
-Architecture distribuée open-source pour créer un agent conversationnel intelligent avec vision, audio, orchestration multi-agents et LLM interchangeables via Ollama.
+Open-source distributed architecture for building an intelligent conversational agent with vision, audio, multi-agent orchestration, and swappable LLMs via Ollama.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Ollama](https://img.shields.io/badge/Ollama-Ready-blue)](https://ollama.com/)
 
-## 🎯 Fonctionnalités
+## 🎯 Features
 
-### 🤖 Intelligence Artificielle
-- **🧠 LLM Interchangeables** : Ollama (Llama 3.1, Mistral, Phi-3, Gemma 2, Qwen)
-- **🔄 Hot-swap Modèles** : Changez de LLM sans redémarrer
-- **💾 Mémoire Longue Durée** : ChromaDB pour conversations persistantes
-- **🎯 Contexte Partagé** : MCP (Model Context Protocol) pour coordination agents
+### 🤖 Artificial Intelligence
+- **🧠 Swappable LLMs** : Ollama (Llama 3.1, Mistral, Phi-3, Gemma 2, Qwen)
+- **🔄 Hot-swap Models** : Change LLM without restarting
+- **💾 Long-term Memory** : ChromaDB for persistent conversations
+- **🎯 Shared Context** : MCP (Model Context Protocol) for agent coordination
 
 ### 👁️ Perception
-- **📹 Vision par Ordinateur** : YOLOv11 pour détection temps réel
-- **👤 Reconnaissance Faciale** : InsightFace avec base de visages personnalisable
-- **🎤 Reconnaissance Vocale** : Whisper STT (français, multilingue)
-- **🔊 Synthèse Vocale** : Piper TTS (voix naturelle française)
+- **📹 Computer Vision** : YOLOv11 for real-time detection
+- **👤 Face Recognition** : InsightFace with customizable face database
+- **🎤 Speech Recognition** : Whisper STT (multilingual support)
+- **🔊 Text-to-Speech** : Piper TTS (natural voice synthesis)
 
 ### 🔄 Orchestration
-- **📊 n8n AI Agent** : Workflows visuels intelligents
-- **🌐 Architecture Distribuée** : Raspberry Pi (hub) + Jetson (edge)
-- **📡 Communication Temps Réel** : WebSocket, MQTT, REST API
-- **🔌 Reconnexion Automatique** : Résilience réseau complète
+- **📊 n8n AI Agent** : Visual intelligent workflows
+- **🌐 Distributed Architecture** : Raspberry Pi (hub) + Jetson (edge)
+- **📡 Real-time Communication** : WebSocket, MQTT, REST API
+- **🔌 Auto-reconnection** : Full network resilience
 
 ### ⚡ Actions
-- ✉️ Envoi d'emails
-- 🔍 Recherches web
-- 📅 Gestion calendrier
-- 🏠 Contrôle domotique (extensible)
+- ✉️ Email sending
+- 🔍 Web searches
+- 📅 Calendar management
+- 🏠 Home automation (extensible)
 
 ---
 
 ## 🏗️ Architecture
 ```
 ┌──────────────────────────────────────────────────────┐
-│           RASPBERRY PI 5 (Hub Central)                │
+│           RASPBERRY PI 5 (Central Hub)                │
 │                                                        │
 │  ┌──────────────────────────────────────────────┐   │
 │  │  n8n AI Agent                                 │   │
-│  │  - Orchestration workflows                    │   │
-│  │  - Coordination agents                        │   │
+│  │  - Workflow orchestration                     │   │
+│  │  - Agent coordination                         │   │
 │  │  - LLM via Ollama (Jetson)                    │   │
 │  └──────────────────────────────────────────────┘   │
 │                                                        │
 │  ┌──────────────────────────────────────────────┐   │
 │  │  MCP Server                                   │   │
-│  │  - Contexte partagé                           │   │
-│  │  - Mémoire conversationnelle                  │   │
-│  │  - État global agents                         │   │
+│  │  - Shared context                             │   │
+│  │  - Conversational memory                      │   │
+│  │  - Global agent state                         │   │
 │  └──────────────────────────────────────────────┘   │
 │                                                        │
 │  [PostgreSQL] [Redis] [ChromaDB] [MQTT] [Grafana]    │
@@ -61,18 +61,18 @@ Architecture distribuée open-source pour créer un agent conversationnel intell
 │                                                        │
 │  ┌──────────────────────────────────────────────┐   │
 │  │  Ollama Server                                │   │
-│  │  - Llama 3.1 8B (défaut)                      │   │
+│  │  - Llama 3.1 8B (default)                     │   │
 │  │  - Mistral 7B, Phi-3, Gemma 2, Qwen          │   │
-│  │  - API OpenAI-compatible                      │   │
-│  │  - Hot-swap modèles                           │   │
+│  │  - OpenAI-compatible API                      │   │
+│  │  - Hot-swap models                            │   │
 │  └──────────────────────────────────────────────┘   │
 │                         ↕                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  │
 │  │   Vision    │  │    Audio    │  │   Actions   │  │
 │  │   Agent     │  │    Agent    │  │   Agent     │  │
 │  │             │  │             │  │             │  │
-│  │  YOLOv11    │  │  Whisper    │  │  Executor   │  │
-│  │  InsightFace│  │  Piper TTS  │  │  Local      │  │
+│  │  YOLOv11    │  │  Whisper    │  │  Local      │  │
+│  │  InsightFace│  │  Piper TTS  │  │  Executor   │  │
 │  └─────────────┘  └─────────────┘  └─────────────┘  │
 │                                                        │
 │  [MCP Client] [MQTT Client] [API Server]              │
@@ -81,32 +81,32 @@ Architecture distribuée open-source pour créer un agent conversationnel intell
 
 ---
 
-## 📋 Prérequis
+## 📋 Prerequisites
 
-### 💻 Matériel Recommandé
+### 💻 Recommended Hardware
 
-| Composant | Spécification | Prix |
-|-----------|---------------|------|
-| **Jetson Orin Nano Super** | 8GB RAM, 1024 CUDA cores | Possédé ✅ |
-| **Raspberry Pi 5** | 8GB RAM recommandé | ~100€ |
-| **Caméra** | Raspberry Pi Camera (CSI) ou USB | Possédé ✅ |
-| **Microphone** | USB (ReSpeaker recommandé) | ~25€ |
-| **Enceinte** | Bluetooth/USB | Possédé ✅ |
-| **SSD Jetson** | NVMe 512GB | ~45€ |
-| **SSD Raspberry** | USB 3.0 256GB | ~35€ |
+| Component | Specification | Price |
+|-----------|---------------|-------|
+| **Jetson Orin Nano Super** | 8GB RAM, 1024 CUDA cores | Owned ✅ |
+| **Raspberry Pi 5** | 8GB RAM recommended | ~$110 |
+| **Camera** | Raspberry Pi Camera (CSI) or USB | Owned ✅ |
+| **Microphone** | USB (ReSpeaker recommended) | ~$30 |
+| **Speaker** | Bluetooth/USB | Owned ✅ |
+| **Jetson SSD** | NVMe 512GB | ~$50 |
+| **Raspberry SSD** | USB 3.0 256GB | ~$40 |
 
-**Total additionnel : ~240€**
+**Additional Total: ~$260**
 
-### 🖥️ Logiciel
+### 🖥️ Software
 
-**Jetson :**
+**Jetson:**
 - JetPack 6.0+
 - Ubuntu 22.04
 - Python 3.11+
 - Ollama
 
-**Raspberry Pi :**
-- Raspberry Pi OS 64-bit ou Ubuntu 22.04
+**Raspberry Pi:**
+- Raspberry Pi OS 64-bit or Ubuntu 22.04
 - Docker & Docker Compose
 - Python 3.11+
 
@@ -114,76 +114,76 @@ Architecture distribuée open-source pour créer un agent conversationnel intell
 
 ## 🚀 Installation
 
-### 📦 1. Raspberry Pi - Hub Central
+### 📦 1. Raspberry Pi - Central Hub
 ```bash
-# Cloner le projet
-git clone https://github.com/VOTRE_USERNAME/multi-agent-system.git
+# Clone the project
+git clone https://github.com/YOUR_USERNAME/multi-agent-system.git
 cd multi-agent-system/raspberry-pi
 
-# Configurer environnement
+# Configure environment
 cp .env.example .env
 nano .env
-# Éditer :
-# - RASPBERRY_PI_IP=192.168.1.XXX (votre IP)
-# - JETSON_IP=192.168.1.XXX (IP du Jetson)
-# - Mots de passe sécurisés
+# Edit:
+# - RASPBERRY_PI_IP=192.168.1.XXX (your IP)
+# - JETSON_IP=192.168.1.XXX (Jetson IP)
+# - Secure passwords
 
-# Installer Docker (si nécessaire)
+# Install Docker (if needed)
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
-# Déconnexion/reconnexion requise
+# Logout/login required
 
-# Lancer les services
+# Start services
 docker-compose up -d
 
-# Vérifier statut
+# Check status
 docker-compose ps
 docker-compose logs -f
 
-# Accès aux interfaces :
-# - n8n : http://raspberry-pi-ip:5678
-# - MCP Server : http://raspberry-pi-ip:8080
-# - Grafana : http://raspberry-pi-ip:3000
-# - ChromaDB : http://raspberry-pi-ip:8000
+# Access interfaces:
+# - n8n: http://raspberry-pi-ip:5678
+# - MCP Server: http://raspberry-pi-ip:8080
+# - Grafana: http://raspberry-pi-ip:3000
+# - ChromaDB: http://raspberry-pi-ip:8000
 ```
 
-### 🤖 2. Jetson Orin Nano - Agent Edge
+### 🤖 2. Jetson Orin Nano - Edge Agent
 ```bash
-# Mettre à jour le système
+# Update system
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y python3-pip python3-venv git
 
-# Cloner le projet
+# Clone project
 cd ~
-git clone https://github.com/VOTRE_USERNAME/multi-agent-system.git
+git clone https://github.com/YOUR_USERNAME/multi-agent-system.git
 cd multi-agent-system/jetson
 
-# Installer Ollama
+# Install Ollama
 curl -fsSL https://ollama.com/install.sh | sh
 
-# Télécharger modèles LLM (choisir selon besoins)
-# Llama 3.1 8B (Recommandé - équilibré)
+# Download LLM models (choose based on needs)
+# Llama 3.1 8B (Recommended - balanced)
 ollama pull llama3.1:8b
 
-# Ou alternatives :
-# ollama pull mistral:7b        # Rapide et efficace
-# ollama pull phi3:medium       # Ultra-léger (2.3GB)
-# ollama pull gemma2:9b         # Google, excellent français
-# ollama pull qwen2.5:7b        # Multilingue excellent
+# Or alternatives:
+# ollama pull mistral:7b        # Fast and efficient
+# ollama pull phi3:medium       # Ultra-light (2.3GB)
+# ollama pull gemma2:9b         # Google, excellent
+# ollama pull qwen2.5:7b        # Multilingual excellent
 
-# Lister modèles installés
+# List installed models
 ollama list
 
-# Créer environnement virtuel Python
+# Create Python virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
-# Installer dépendances Python
+# Install Python dependencies
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Installer llama.cpp (pour Whisper.cpp)
+# Install llama.cpp (for Whisper.cpp)
 cd ~
 git clone https://github.com/ggerganov/llama.cpp
 cd llama.cpp
@@ -191,34 +191,34 @@ mkdir build && cd build
 cmake .. -DLLAMA_CUDA=ON
 make -j$(nproc)
 
-# Installer Whisper.cpp
+# Install Whisper.cpp
 cd ~
 git clone https://github.com/ggerganov/whisper.cpp
 cd whisper.cpp
 make -j$(nproc)
-# Télécharger modèle Whisper
+# Download Whisper model
 bash ./models/download-ggml-model.sh medium
 
-# Installer Piper TTS
+# Install Piper TTS
 pip install piper-tts
-# Télécharger voix française
+# Download voice model
 mkdir -p ~/multi-agent-system/jetson/models/piper
 cd ~/multi-agent-system/jetson/models/piper
-wget https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json
+wget https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx
+wget https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
 
 # Configuration
 cd ~/multi-agent-system/jetson
 cp config.example.yml config.yml
 nano config.yml
-# Éditer :
+# Edit:
 # - raspberry_pi_ip: "192.168.1.XXX"
 # - jetson_ip: "192.168.1.XXX"
-# - Choisir modèle Ollama
+# - Choose Ollama model
 
-# Configurer Bluetooth (pour enceinte)
+# Configure Bluetooth (for speaker)
 sudo apt install -y bluez pulseaudio-module-bluetooth
-# Pairage enceinte :
+# Pair speaker:
 bluetoothctl
 # > power on
 # > agent on
@@ -228,7 +228,7 @@ bluetoothctl
 # > connect AA:BB:CC:DD:EE:FF
 # > exit
 
-# Télécharger YOLOv11
+# Download YOLOv11
 cd ~/multi-agent-system/jetson
 python3 << EOF
 from ultralytics import YOLO
@@ -236,25 +236,25 @@ model = YOLO('yolo11n.pt')
 model.export(format='engine', device=0, half=True)
 import shutil
 shutil.move('yolo11n.engine', 'models/yolo11n.engine')
-print("✅ YOLOv11 exporté")
+print("✅ YOLOv11 exported")
 EOF
 
-# Test rapide
+# Quick test
 python3 -c "from modules.vision_agent import VisionAgent; print('✅ Vision OK')"
 python3 -c "from modules.audio_agent import AudioAgent; print('✅ Audio OK')"
 python3 -c "from modules.llm_agent import LLMAgent; print('✅ LLM OK')"
 
-# Lancer l'agent
+# Launch agent
 python3 main.py
 ```
 
-### 🔧 3. Configuration n8n
+### 🔧 3. Configure n8n
 ```bash
-# Accéder à n8n : http://raspberry-pi-ip:5678
+# Access n8n: http://raspberry-pi-ip:5678
 
-# 1. Créer compte admin
+# 1. Create admin account
 
-# 2. Configurer Credentials :
+# 2. Configure Credentials:
 
 # Credential: Jetson LLM (OpenAI compatible)
 - Name: Jetson Ollama
@@ -263,27 +263,27 @@ python3 main.py
 
 # Credential: ChromaDB
 - URL: http://chromadb:8000
-- Auth Token: (votre CHROMA_TOKEN du .env)
+- Auth Token: (your CHROMA_TOKEN from .env)
 
 # Credential: MQTT
 - Protocol: mqtt://
 - Host: mqtt
 - Port: 1883
 
-# Credential: SMTP (pour emails)
+# Credential: SMTP (for emails)
 - Host: smtp.gmail.com
 - Port: 587
-- User: votre-email@gmail.com
-- Password: app-password-gmail
+- User: your-email@gmail.com
+- Password: gmail-app-password
 
-# 3. Importer workflows
+# 3. Import workflows
 # Settings > Workflows > Import from File
-# Importer les fichiers depuis raspberry-pi/n8n/workflows/
+# Import files from raspberry-pi/n8n/workflows/
 ```
 
-### 🔄 4. Configurer comme Service (Jetson)
+### 🔄 4. Configure as Service (Jetson)
 ```bash
-# Créer service systemd
+# Create systemd service
 sudo nano /etc/systemd/system/jetson-agent.service
 ```
 ```ini
@@ -311,88 +311,88 @@ StandardError=journal
 WantedBy=multi-user.target
 ```
 ```bash
-# Activer et démarrer
+# Enable and start
 sudo systemctl daemon-reload
 sudo systemctl enable jetson-agent
 sudo systemctl start jetson-agent
 
-# Vérifier statut
+# Check status
 sudo systemctl status jetson-agent
 
-# Voir logs
+# View logs
 sudo journalctl -u jetson-agent -f
 ```
 
 ---
 
-## 🎮 Utilisation
+## 🎮 Usage
 
-### 💬 Scénario 1 : Conversation Simple
+### 💬 Scenario 1: Simple Conversation
 ```
-Utilisateur : "Bonjour, qui suis-je ?"
+User: "Hello, who am I?"
 
-Système :
-1. 👁️ Vision détecte et reconnaît votre visage
-2. 🎤 Audio transcrit votre voix (Whisper)
-3. 📡 Contexte envoyé au MCP Server
-4. 🧠 n8n AI Agent génère réponse (Ollama/Llama 3.1)
-5. 🔊 Réponse synthétisée (Piper TTS)
-6. 💾 Conversation sauvegardée (ChromaDB)
+System:
+1. 👁️ Vision detects and recognizes your face
+2. 🎤 Audio transcribes your voice (Whisper)
+3. 📡 Context sent to MCP Server
+4. 🧠 n8n AI Agent generates response (Ollama/Llama 3.1)
+5. 🔊 Response synthesized (Piper TTS)
+6. 💾 Conversation saved (ChromaDB)
 
-Agent : "Bonjour Pierre ! Comment puis-je vous aider ?"
-```
-
-### 📧 Scénario 2 : Envoi Email
-```
-Utilisateur : "Envoie un email à Jean"
-
-Agent : "Quel est le sujet de l'email ?"
-
-Utilisateur : "Réunion demain"
-
-Agent : "Que voulez-vous dire dans le message ?"
-
-Utilisateur : "Confirmer réunion 10h"
-
-Système :
-1. 🤖 n8n AI Agent détecte intention email
-2. 🔍 Recherche contact "Jean" dans MCP
-3. ✉️ Workflow Email Agent envoie le message
-4. 📊 Action loguée dans MCP
-
-Agent : "Email envoyé à Jean Dupont avec succès !"
+Agent: "Hello Peter! How can I help you?"
 ```
 
-### 🔄 Changer de Modèle LLM
+### 📧 Scenario 2: Send Email
+```
+User: "Send an email to John"
+
+Agent: "What's the subject of the email?"
+
+User: "Meeting tomorrow"
+
+Agent: "What would you like to say in the message?"
+
+User: "Confirm meeting at 10am"
+
+System:
+1. 🤖 n8n AI Agent detects email intent
+2. 🔍 Searches for contact "John" in MCP
+3. ✉️ Email Agent workflow sends message
+4. 📊 Action logged in MCP
+
+Agent: "Email sent to John Doe successfully!"
+```
+
+### 🔄 Switch LLM Model
 ```bash
-# Méthode 1 : Ollama CLI
+# Method 1: Ollama CLI
 ollama pull mistral:7b
-# Puis redémarrer agent ou via API
+# Then restart agent or via API
 
-# Méthode 2 : API REST
+# Method 2: REST API
 curl -X POST http://jetson-ip:8000/switch-model \
   -H "Content-Type: application/json" \
   -d '{"model": "mistral:7b"}'
 
-# Méthode 3 : Commande vocale (si implémentée)
-Utilisateur : "Change le modèle pour Mistral"
+# Method 3: Voice command (if implemented)
+User: "Switch to Mistral model"
 ```
 
-### 📊 Modèles LLM Disponibles
+### 📊 Available LLM Models
 
-| Modèle | Taille | RAM | Vitesse | Usage |
-|--------|--------|-----|---------|-------|
-| **llama3.1:8b** | 4.7GB | ~6GB | Moyen | Recommandé - Équilibré |
-| **mistral:7b** | 4.1GB | ~5GB | Rapide | Conversations rapides |
-| **phi3:medium** | 2.3GB | ~3GB | Ultra-rapide | Réponses courtes |
-| **gemma2:9b** | 5.4GB | ~7GB | Moyen | Excellent français |
-| **qwen2.5:7b** | 4.4GB | ~6GB | Rapide | Multilingue |
+| Model | Size | RAM | Speed | Use Case |
+|-------|------|-----|-------|----------|
+| **llama3.1:8b** | 4.7GB | ~6GB | Medium | Recommended - Balanced |
+| **mistral:7b** | 4.1GB | ~5GB | Fast | Quick conversations |
+| **phi3:medium** | 2.3GB | ~3GB | Ultra-fast | Short responses |
+| **gemma2:9b** | 5.4GB | ~7GB | Medium | Excellent quality |
+| **qwen2.5:7b** | 4.4GB | ~6GB | Fast | Multilingual |
 
 ---
 
 ## 🔧 Configuration
 
-### 📝 Variables d'Environnement (Raspberry Pi)
+### 📝 Environment Variables (Raspberry Pi)
 ```bash
 # raspberry-pi/.env
 
@@ -402,22 +402,22 @@ JETSON_IP=192.168.1.101
 
 # n8n
 N8N_USER=admin
-N8N_PASSWORD=VotreMotDePasseSecurise123!
+N8N_PASSWORD=YourSecurePassword123!
 
 # PostgreSQL
-POSTGRES_PASSWORD=VotreMotDePassePostgres456!
+POSTGRES_PASSWORD=YourPostgresPassword456!
 
 # ChromaDB
-CHROMA_TOKEN=VotreTokenChroma789!
+CHROMA_TOKEN=YourChromaToken789!
 
 # Grafana
 GRAFANA_PASSWORD=admin
 
 # Timezone
-TZ=Europe/Paris
+TZ=UTC
 ```
 
-### ⚙️ Configuration Jetson
+### ⚙️ Jetson Configuration
 ```yaml
 # jetson/config.yml
 
@@ -432,7 +432,7 @@ modules:
     ollama:
       host: "localhost"
       port: 11434
-      model: "llama3.1:8b"  # Modèle par défaut
+      model: "llama3.1:8b"  # Default model
       temperature: 0.7
       num_ctx: 8192
     api_server:
@@ -442,26 +442,26 @@ modules:
   vision:
     enabled: true
     camera:
-      type: "csi"  # ou "usb"
+      type: "csi"  # or "usb"
       device: 0
 
   audio:
     enabled: true
     speaker:
-      device: "pulse"  # Pour Bluetooth
+      device: "pulse"  # For Bluetooth
 ```
 
 ---
 
-## 🧪 Tests
+## 🧪 Testing
 
-### ✅ Test Complet du Système
+### ✅ Full System Test
 ```bash
-# 1. Vérifier services Raspberry Pi
+# 1. Check Raspberry Pi services
 curl http://raspberry-pi-ip:8080/health  # MCP Server
 curl http://raspberry-pi-ip:5678        # n8n
 
-# 2. Vérifier Jetson
+# 2. Check Jetson
 curl http://jetson-ip:8000/status       # Agent
 curl http://jetson-ip:8001/health       # LLM Server
 curl http://jetson-ip:11434/api/tags    # Ollama
@@ -471,14 +471,14 @@ curl -X POST http://jetson-ip:8001/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "llama3.1:8b",
-    "messages": [{"role": "user", "content": "Bonjour"}]
+    "messages": [{"role": "user", "content": "Hello"}]
   }'
 
-# 4. Test workflow complet
+# 4. Test complete workflow
 curl -X POST http://raspberry-pi-ip:5678/webhook/agent-input \
   -H "Content-Type: application/json" \
   -d '{
-    "text": "Bonjour, comment vas-tu ?",
+    "text": "Hello, how are you?",
     "user_identity": "Test User"
   }'
 ```
@@ -487,12 +487,12 @@ curl -X POST http://raspberry-pi-ip:5678/webhook/agent-input \
 
 ## 📊 Monitoring
 
-### 🎛️ Dashboards Disponibles
+### 🎛️ Available Dashboards
 
-- **Grafana** : http://raspberry-pi-ip:3000 (admin/admin)
-- **n8n** : http://raspberry-pi-ip:5678
-- **MCP Stats** : http://raspberry-pi-ip:8080/stats
-- **Prometheus** : http://raspberry-pi-ip:9090
+- **Grafana**: http://raspberry-pi-ip:3000 (admin/admin)
+- **n8n**: http://raspberry-pi-ip:5678
+- **MCP Stats**: http://raspberry-pi-ip:8080/stats
+- **Prometheus**: http://raspberry-pi-ip:9090
 
 ### 📝 Logs
 ```bash
@@ -508,156 +508,156 @@ sudo journalctl -u jetson-agent -f
 
 ---
 
-## 💰 Coûts
+## 💰 Costs
 
-### 💵 Budget Total
+### 💵 Total Budget
 ```
-MATÉRIEL POSSÉDÉ :
-✅ Jetson Orin Nano Super : 0€
-✅ Caméra Raspberry Pi : 0€
-✅ Enceinte Bluetooth : 0€
+OWNED HARDWARE:
+✅ Jetson Orin Nano Super: $0
+✅ Raspberry Pi Camera: $0
+✅ Bluetooth Speaker: $0
 
-MATÉRIEL À ACHETER :
-- Raspberry Pi 5 (8GB) : ~100€
-- SSD NVMe 512GB (Jetson) : ~45€
-- SSD USB 256GB (RPi) : ~35€
-- Microphone USB : ~25€
-- Boîtier + accessoires : ~35€
+HARDWARE TO BUY:
+- Raspberry Pi 5 (8GB): ~$110
+- NVMe SSD 512GB (Jetson): ~$50
+- USB SSD 256GB (RPi): ~$40
+- USB Microphone: ~$30
+- Case + accessories: ~$40
 
-TOTAL : ~240€
+TOTAL: ~$270
 
-LOGICIELS : 0€ (100% open source)
+SOFTWARE: $0 (100% open source)
 
-ÉLECTRICITÉ :
-- Jetson (15W moyen) : ~35€/an
-- RPi 5 (10W moyen) : ~20€/an
-- Total : ~55€/an
+ELECTRICITY:
+- Jetson (15W avg): ~$40/year
+- RPi 5 (10W avg): ~$25/year
+- Total: ~$65/year
 
-COMPARAISON CLOUD (5 ans) :
-- OpenAI + APIs : 9000-28000€
-- Notre solution : 240€ + 275€ = 515€
-- ÉCONOMIE : 8485-27485€ ! 🎉
+CLOUD COMPARISON (5 years):
+- OpenAI + APIs: $10,000-$30,000
+- Our solution: $270 + $325 = $595
+- SAVINGS: $9,405-$29,405! 🎉
 ```
 
 ---
 
-## 🔧 Dépannage
+## 🔧 Troubleshooting
 
-### ❌ Problèmes Courants
+### ❌ Common Issues
 
-#### MCP Server ne démarre pas
+#### MCP Server won't start
 ```bash
 docker logs mcp-server
 docker-compose restart postgres redis mcp-server
 ```
 
-#### Jetson ne se connecte pas au MCP
+#### Jetson can't connect to MCP
 ```bash
-# Vérifier réseau
+# Check network
 ping raspberry-pi-ip
 
-# Vérifier config
+# Check config
 cat ~/multi-agent-system/jetson/config.yml | grep raspberry_pi_ip
 
-# Tester WebSocket
+# Test WebSocket
 wscat -c ws://raspberry-pi-ip:8081/ws/agent/test
 ```
 
-#### Ollama ne répond pas
+#### Ollama not responding
 ```bash
-# Redémarrer Ollama
+# Restart Ollama
 sudo systemctl restart ollama
 
-# Vérifier modèles
+# Check models
 ollama list
 
-# Télécharger à nouveau
+# Re-download
 ollama pull llama3.1:8b
 
-# Tester directement
+# Test directly
 ollama run llama3.1:8b "Test"
 ```
 
-#### Audio ne fonctionne pas
+#### Audio not working
 ```bash
-# Lister devices
+# List devices
 arecord -l  # Microphones
 aplay -l    # Speakers
 
-# Tester micro
+# Test microphone
 arecord -d 3 test.wav && aplay test.wav
 
-# Tester TTS
-echo "Test" | piper --model fr_FR-siwis-medium --output_file test.wav
+# Test TTS
+echo "Test" | piper --model en_US-lessac-medium --output_file test.wav
 paplay test.wav
 ```
 
 ---
 
-## 🤝 Contribution
+## 🤝 Contributing
 
-Les contributions sont bienvenues ! Pour contribuer :
+Contributions are welcome! To contribute:
 
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/amelioration`)
-3. Commit (`git commit -m 'Ajout fonctionnalité'`)
-4. Push (`git push origin feature/amelioration`)
-5. Ouvrir une Pull Request
+1. Fork the project
+2. Create a branch (`git checkout -b feature/improvement`)
+3. Commit (`git commit -m 'Add feature'`)
+4. Push (`git push origin feature/improvement`)
+5. Open a Pull Request
 
 ---
 
 ## 📝 License
 
-MIT License - voir [LICENSE](LICENSE)
+MIT License - see [LICENSE](LICENSE)
 
-Vous êtes libre d'utiliser, modifier et distribuer ce projet.
+You are free to use, modify, and distribute this project.
 
 ---
 
-## 🙏 Remerciements
+## 🙏 Acknowledgments
 
-Ce projet utilise ces excellents outils open source :
+This project uses these excellent open-source tools:
 
-- [Ollama](https://ollama.com/) - Gestion LLM simplifiée
-- [Ultralytics YOLOv11](https://github.com/ultralytics/ultralytics) - Détection objets
+- [Ollama](https://ollama.com/) - Simplified LLM management
+- [Ultralytics YOLOv11](https://github.com/ultralytics/ultralytics) - Object detection
 - [Whisper.cpp](https://github.com/ggerganov/whisper.cpp) - Speech-to-Text
 - [Piper TTS](https://github.com/rhasspy/piper) - Text-to-Speech
-- [n8n](https://github.com/n8n-io/n8n) - Orchestration workflows
-- [InsightFace](https://github.com/deepinsight/insightface) - Reconnaissance faciale
-- [ChromaDB](https://github.com/chroma-core/chroma) - Base vectorielle
-- [FastAPI](https://github.com/tiangolo/fastapi) - Framework API
+- [n8n](https://github.com/n8n-io/n8n) - Workflow orchestration
+- [InsightFace](https://github.com/deepinsight/insightface) - Face recognition
+- [ChromaDB](https://github.com/chroma-core/chroma) - Vector database
+- [FastAPI](https://github.com/tiangolo/fastapi) - API framework
 
 ---
 
 ## 📞 Support
 
-- 🐛 **Bugs** : [Ouvrir une issue](https://github.com/VOTRE_USERNAME/multi-agent-system/issues)
-- 💬 **Questions** : [Discussions GitHub](https://github.com/VOTRE_USERNAME/multi-agent-system/discussions)
-- 📖 **Documentation** : [Wiki](https://github.com/VOTRE_USERNAME/multi-agent-system/wiki)
+- 🐛 **Bugs**: [Open an issue](https://github.com/YOUR_USERNAME/multi-agent-system/issues)
+- 💬 **Questions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/multi-agent-system/discussions)
+- 📖 **Documentation**: [Wiki](https://github.com/YOUR_USERNAME/multi-agent-system/wiki)
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Support multi-utilisateurs
-- [ ] Interface web de configuration
-- [ ] Support modèles vision (LLaVA, Qwen-VL)
-- [ ] Integration Home Assistant
-- [ ] Support langues supplémentaires
-- [ ] Mobile app (contrôle à distance)
-- [ ] RAG avancé avec documents personnels
-- [ ] Fine-tuning modèles personnalisés
+- [ ] Multi-user support
+- [ ] Web configuration interface
+- [ ] Vision model support (LLaVA, Qwen-VL)
+- [ ] Home Assistant integration
+- [ ] Additional language support
+- [ ] Mobile app (remote control)
+- [ ] Advanced RAG with personal documents
+- [ ] Custom model fine-tuning
 
 ---
 
-## ⭐ Statistiques
+## ⭐ Stats
 
-![GitHub stars](https://img.shields.io/github/stars/VOTRE_USERNAME/multi-agent-system?style=social)
-![GitHub forks](https://img.shields.io/github/forks/VOTRE_USERNAME/multi-agent-system?style=social)
-![GitHub issues](https://img.shields.io/github/issues/VOTRE_USERNAME/multi-agent-system)
+![GitHub stars](https://img.shields.io/github/stars/YOUR_USERNAME/multi-agent-system?style=social)
+![GitHub forks](https://img.shields.io/github/forks/YOUR_USERNAME/multi-agent-system?style=social)
+![GitHub issues](https://img.shields.io/github/issues/YOUR_USERNAME/multi-agent-system)
 
 ---
 
-**Construit avec ❤️ pour la communauté open source**
+**Built with ❤️ for the open-source community**
 
-⭐ **Si ce projet vous aide, donnez-lui une étoile sur GitHub !**
+⭐ **If this project helps you, give it a star on GitHub!**
